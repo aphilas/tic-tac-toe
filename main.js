@@ -1,4 +1,4 @@
-const cellEls = document.getElementsByClassName('cell')
+const cellEls = Array.from(document.getElementsByClassName('cell'))
 const turnEl = document.getElementById('turn') // to show player turn message
 
 let turn = 1 // or 2
@@ -10,7 +10,7 @@ const playerTurnMsg = _ => `It's Player ${turn}'s turn to play` // dynamically g
 turnEl.innerHTML = playerTurnMsg() // start with player 1
 
 const resetGame = _ => {
-  Array.from(cellEls).forEach(cellEl => {
+  cellEls.forEach(cellEl => {
     cellEl.addEventListener('click', play) // make all cells playable
     cellEl.innerHTML = '' // clear Xs and Os
   })  
@@ -62,6 +62,7 @@ const play = event => {
 
   if (winningCombination(positions)) { // handle win
     turnEl.innerHTML = `Player ${turn} won!`
+    cellEls.forEach(cell => cell.removeEventListener('click', play)) // temporarily disable clicking of all cells
     setTimeout(resetGame, 2000) // reset game after 2 seconds in order to keep msg of who won on screen for some time
     return
   }
@@ -77,4 +78,4 @@ const play = event => {
   turnEl.innerHTML = playerTurnMsg() // set message of player to play next
 }
 
-Array.from(cellEls).forEach(cellEl => cellEl.addEventListener('click', play)) // run fn play when a cell is clicked
+cellEls.forEach(cellEl => cellEl.addEventListener('click', play)) // run fn play when a cell is clicked
